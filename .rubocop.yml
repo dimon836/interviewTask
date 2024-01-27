@@ -1,0 +1,84 @@
+require:
+  - rubocop-rspec
+  - rubocop-rails
+  - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 3.2.2
+  NewCops: enable
+  Exclude:
+    - 'bin/**/*'
+    - 'log/**/*'
+    - 'public/**/*'
+    - 'vendor/**/*'
+    - 'tmp/**/*'
+    - '.git/**/*'
+    - 'db/schema.rb'
+
+Rails/SkipsModelValidations:
+  AllowedMethods:
+    - insert_all
+
+RSpec/NestedGroups:
+  Enabled: false
+RSpec/ScatteredSetup:
+  Enabled: true
+RSpec/MultipleExpectations:
+  Enabled: true
+RSpec/VariableName:
+  Enabled: true
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+Rails/FilePath:
+  EnforcedStyle: arguments
+Rails/NotNullColumn:
+  Enabled: false
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 17
+  Exclude:
+    - 'db/migrate/*'
+Metrics/BlockLength:
+  Exclude:
+    - 'Gemfile'
+    - 'Rakefile'
+    - 'spec/**/*.rb'
+    - 'db/**/*'
+    - 'lib/tasks/**/*'
+    - 'config/routes.rb'
+    - 'config/environments/**/*'
+    - 'config/initializers/**/*'
+Metrics/MethodLength:
+  Exclude:
+    - 'db/**/*'
+    - 'spec/factories/**/*'
+Metrics/ClassLength:
+  Exclude:
+    - 'db/**/*'
+    - 'spec/factories/**/*'
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - 'config/initializers/**/*'
+
+RSpec/EmptyExampleGroup:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
