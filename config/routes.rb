@@ -1,8 +1,19 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1 do
+      get 'tasks/index'
+      get 'tasks/show'
+      get 'tasks/create'
+      get 'tasks/update'
+      get 'tasks/destroy'
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+      get 'projects/index'
+      get 'projects/show'
+      get 'projects/create'
+      get 'projects/update'
+      get 'projects/destroy'
+    end
+  end
 end
