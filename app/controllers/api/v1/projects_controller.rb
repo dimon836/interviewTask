@@ -3,15 +3,55 @@
 module Api
   module V1
     class ProjectsController < ApplicationController
-      def index; end
+      def index
+        Project.all
+      end
 
-      def show; end
+      def show
+        @project = Project.new
+      end
 
-      def create; end
+      def create
+        @project = Projects::Create.call(project_params)
 
-      def update; end
+        respond_to do |format|
+          if @project.errors.any?
+            format.json { render json: { error: 'Error creating' }, status: :unprocessable_entity }
+          else
+            format.json { render json: @project, status: :created }
+          end
+        end
+      end
 
-      def destroy; end
+      def update
+        @project = Project::Update.call(@project, project_params)
+
+        respond_to do |format|
+          if @project.errors.any?
+            format.json { render json: { error: 'Error updating' }, status: :unprocessable_entity }
+          else
+            format.json { render json: @project, status: :ok }
+          end
+        end
+      end
+
+      def destroy
+        @destroyed_project = Project::Destroy.call(params[:id])
+
+        respond_to do |format|
+          if @destroyed_project.errors.present?
+            format.json { render json: { error: @destroyed_project.errors[:not_found] }, status: :unprocessable_entity }
+          else
+            format.json { render json: { success: 'Project destroyed' }, status: :ok }
+          end
+        end
+      end
+    end
+
+    private
+
+    def project_params
+      params.require(:project).permit(:name, :description)
     end
   end
 end

@@ -3,7 +3,6 @@
 module Api
   module V1
     class TasksController < ApplicationController
-      def index; end
 
       def show; end
 
@@ -12,6 +11,12 @@ module Api
       def update; end
 
       def destroy; end
+    end
+
+    private
+
+    def project_params
+      params.require(:project).permit(:name, :description, :status).merge(project_id: params[:project_id])
     end
   end
 end
