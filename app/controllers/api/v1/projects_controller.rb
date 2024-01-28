@@ -3,12 +3,16 @@
 module Api
   module V1
     class ProjectsController < ApplicationController
-      def index
-        Project.all
-      end
-
       def show
-        @project = Project.new
+        @project = Project.find(params[:id])
+
+        respond_to do |format|
+          if @project
+            format_response(format, @project, :ok)
+          else
+            format_response(format, { error: 'Project not found' }, :unprocessable_entity)
+          end
+        end
       end
 
       def create
@@ -16,9 +20,9 @@ module Api
 
         respond_to do |format|
           if @project.errors.any?
-            format.json { render json: { error: 'Error creating project' }, status: :unprocessable_entity }
+            format_response(format, { error: 'Error creating project' }, :unprocessable_entity)
           else
-            format.json { render json: @project, status: :created }
+            format_response(format, @project, :created)
           end
         end
       end
@@ -28,9 +32,9 @@ module Api
 
         respond_to do |format|
           if @project.errors.any?
-            format.json { render json: { error: 'Error updating project' }, status: :unprocessable_entity }
+            format_response(format, { error: 'Error updating project' }, :unprocessable_entity)
           else
-            format.json { render json: @project, status: :ok }
+            format_response(format, @project, :ok)
           end
         end
       end
@@ -40,9 +44,9 @@ module Api
 
         respond_to do |format|
           if @destroyed_project.errors.present?
-            format.json { render json: { error: @destroyed_project.errors[:not_found] }, status: :unprocessable_entity }
+            format_response(format, { error: @destroyed_project.errors[:not_found] }, :unprocessable_entity)
           else
-            format.json { render json: { success: 'Project destroyed' }, status: :ok }
+            format_response(format, { success: 'Project destroyed' }, :ok)
           end
         end
       end
@@ -51,6 +55,10 @@ module Api
 
       def project_params
         params.require(:project).permit(:name, :description)
+      end
+
+      def format_response(format, render_json, status)
+        format.json { render json: render_json, status: }
       end
     end
   end
