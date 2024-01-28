@@ -16,7 +16,7 @@ module Api
 
         respond_to do |format|
           if @project.errors.any?
-            format.json { render json: { error: 'Error creating' }, status: :unprocessable_entity }
+            format.json { render json: { error: 'Error creating project' }, status: :unprocessable_entity }
           else
             format.json { render json: @project, status: :created }
           end
@@ -28,7 +28,7 @@ module Api
 
         respond_to do |format|
           if @project.errors.any?
-            format.json { render json: { error: 'Error updating' }, status: :unprocessable_entity }
+            format.json { render json: { error: 'Error updating project' }, status: :unprocessable_entity }
           else
             format.json { render json: @project, status: :ok }
           end
@@ -46,12 +46,12 @@ module Api
           end
         end
       end
-    end
 
-    private
+      private
 
-    def project_params
-      params.require(:project).permit(:name, :description)
+      def project_params
+        params.require(:project).permit(:name, :description)
+      end
     end
   end
 end
