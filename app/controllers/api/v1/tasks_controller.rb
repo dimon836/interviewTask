@@ -3,9 +3,9 @@
 module Api
   module V1
     class TasksController < ApplicationController
-      def show
-        @task = Task.find(params[:id])
+      before_action :task, only: %i[show update destroy]
 
+      def show
         respond_to do |format|
           if @task
             format_response(format, @task, :ok)
@@ -16,37 +16,37 @@ module Api
       end
 
       def create
-        @task = Task::Create.call(task_params)
+        @task = Tasks::Create.call(task_params)
 
         respond_to do |format|
           if @task.errors.any?
-            format.json { render json: { error: 'Error creating task' }, status: :unprocessable_entity }
+            format_response(format, { error: 'Error creating task' }, :unprocessable_entity)
           else
-            format.json { render json: @task, status: :created }
+            format_response(format, @task, :created)
           end
         end
       end
 
       def update
-        @task = Task::Update.call(@task, task_params)
+        @task = Tasks::Update.call(@task, task_params)
 
         respond_to do |format|
           if @task.errors.any?
-            format.json { render json: { error: 'Error updating task' }, status: :unprocessable_entity }
+            format_response(format, { error: 'Error updating task' }, :unprocessable_entity)
           else
-            format.json { render json: @task, status: :ok }
+            format_response(format, @task, :ok)
           end
         end
       end
 
       def destroy
-        @destroyed_task = Task::Destroy.call(params[:id])
+        @destroyed_task = Tasks::Destroy.call(params[:id])
 
         respond_to do |format|
           if @destroyed_task.errors.present?
-            format.json { render json: { error: @destroyed_task.errors[:not_found] }, status: :unprocessable_entity }
+            format_response(format, { error: @destroyed_task.errors[:not_found] }, :unprocessable_entity)
           else
-            format.json { render json: { success: 'Task destroyed' }, status: :ok }
+            format_response(format, { success: 'Task destroyed' }, :ok)
           end
         end
       end
@@ -57,12 +57,12 @@ module Api
         params.require(:task).permit(:name, :description, :status).merge(project_id: params[:project_id])
       end
 
-      def format_success_response(format, success_message, status)
-        format.json { render json: { success: success_message }, status: }
+      def task
+        @task ||= Task.find(params[:id])
       end
 
-      def format_error_response(format, error_message)
-        format.json { render json: { error: error_message }, status: :unprocessable_entity }
+      def format_response(format, render_json, status)
+        format.json { render json: render_json, status: }
       end
     end
   end

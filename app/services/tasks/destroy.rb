@@ -2,8 +2,8 @@
 
 module Tasks
   class Destroy
-    def self.call(task_id)
-      new(task_id).call
+    def self.call(task)
+      new(task).call
     end
 
     def call
@@ -11,18 +11,14 @@ module Tasks
       self
     end
 
-    attr_reader :task_id
+    attr_reader :task
     attr_accessor :errors
 
     private
 
-    def initialize(task_id)
-      @task_id = task_id
+    def initialize(task)
+      @task = task
       @errors = {}
-    end
-
-    def task
-      @task ||= Task.find(task_id)
     end
 
     def remove

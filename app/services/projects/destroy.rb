@@ -2,8 +2,8 @@
 
 module Projects
   class Destroy
-    def self.call(project_id)
-      new(project_id).call
+    def self.call(project)
+      new(project).call
     end
 
     def call
@@ -11,18 +11,14 @@ module Projects
       self
     end
 
-    attr_reader :project_id
+    attr_reader :project
     attr_accessor :errors
 
     private
 
-    def initialize(project_id)
-      @project_id = project_id
+    def initialize(project)
+      @project = project
       @errors = {}
-    end
-
-    def project
-      @project ||= Project.find(project_id)
     end
 
     def remove

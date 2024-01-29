@@ -3,9 +3,9 @@
 module Api
   module V1
     class ProjectsController < ApplicationController
-      def show
-        @project = Project.find(params[:id])
+      before_action :project, only: %i[show update destroy]
 
+      def show
         respond_to do |format|
           if @project
             format_response(format, @project, :ok)
@@ -28,7 +28,7 @@ module Api
       end
 
       def update
-        @project = Project::Update.call(@project, project_params)
+        @project = Projects::Update.call(@project, project_params)
 
         respond_to do |format|
           if @project.errors.any?
@@ -40,7 +40,7 @@ module Api
       end
 
       def destroy
-        @destroyed_project = Project::Destroy.call(params[:id])
+        @destroyed_project = Projects::Destroy.call(@project)
 
         respond_to do |format|
           if @destroyed_project.errors.present?
@@ -55,6 +55,10 @@ module Api
 
       def project_params
         params.require(:project).permit(:name, :description)
+      end
+
+      def project
+        @project ||= Project.find(params[:id])
       end
 
       def format_response(format, render_json, status)

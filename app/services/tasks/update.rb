@@ -2,21 +2,21 @@
 
 module Tasks
   class Update
-    def self.call(tasks, params)
-      new(tasks, params).call
+    def self.call(task, params)
+      new(task, params).call
     end
 
     def call
-      tasks.update(params)
-      tasks
+      task.update(params)
+      task
     end
 
-    attr_reader :tasks, :params
+    attr_reader :task, :params
 
     private
 
-    def initialize(tasks, params)
-      @tasks = tasks
+    def initialize(task, params)
+      @task = task
       @params = params
     end
   end

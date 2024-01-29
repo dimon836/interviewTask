@@ -4,9 +4,9 @@ class Task < ApplicationRecord
   belongs_to :project
 
   enum status: {
-    new: 1,
-    in_progress: 2,
-    finished: 3
+    recent: 1,
+    ongoing: 2,
+    completed: 3
   }
 
   validates :name, presence: true, length: { minimum: 3, maximum: 30 }
