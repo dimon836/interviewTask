@@ -3,6 +3,8 @@
 class Task < ApplicationRecord
   belongs_to :project
 
+  scope :project_tasks, ->(project_id) { where(project_id:) }
+
   enum status: {
     recent: 1,
     ongoing: 2,

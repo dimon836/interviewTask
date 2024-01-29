@@ -5,6 +5,14 @@ module Api
     class TasksController < ApplicationController
       before_action :task, only: %i[show update destroy]
 
+      def index
+        @tasks = Task.project_tasks(params[:project_id])
+
+        respond_to do |format|
+          format_response(format, @tasks, :ok)
+        end
+      end
+
       def show
         respond_to do |format|
           if @task
@@ -40,7 +48,7 @@ module Api
       end
 
       def destroy
-        @destroyed_task = Tasks::Destroy.call(params[:id])
+        @destroyed_task = Tasks::Destroy.call(@task)
 
         respond_to do |format|
           if @destroyed_task.errors.present?
