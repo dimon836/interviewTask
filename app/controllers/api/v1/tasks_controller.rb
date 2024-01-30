@@ -6,7 +6,7 @@ module Api
       before_action :task, only: %i[show update destroy]
 
       def index
-        @tasks = Task.project_tasks(params[:project_id])
+        @tasks = Task.by_status(Task.statuses[:recent])
 
         respond_to do |format|
           format_response(format, @tasks, :ok)

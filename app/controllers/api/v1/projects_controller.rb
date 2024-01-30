@@ -3,12 +3,22 @@
 module Api
   module V1
     class ProjectsController < ApplicationController
-      before_action :project, only: %i[show update destroy]
+      before_action :project, only: %i[update destroy]
+
+      def index
+        @projects_with_tasks = Project.with_tasks_by_project
+
+        respond_to do |format|
+          format_response(format, @projects_with_tasks, :ok)
+        end
+      end
 
       def show
+        @project_with_tasks = Project.with_tasks_by_project_id(params[:id])
+
         respond_to do |format|
-          if @project
-            format_response(format, @project, :ok)
+          if @project_with_tasks
+            format_response(format, @project_with_tasks, :ok)
           else
             format_response(format, { error: 'Project not found' }, :unprocessable_entity)
           end

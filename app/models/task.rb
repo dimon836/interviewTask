@@ -1,9 +1,26 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: tasks
+#
+#  id          :bigint           not null, primary key
+#  name        :string
+#  description :text
+#  status      :integer
+#  project_id  :bigint           not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 class Task < ApplicationRecord
   belongs_to :project
 
   scope :project_tasks, ->(project_id) { where(project_id:) }
+
+  # Запити для фільтрації завдань за статусом
+  scope :by_status, ->(status) { where(status:) }
+  scope :by_status_asc, -> { order(status: :asc) }
+  scope :by_status_desc, -> { order(status: :desc) }
 
   enum status: {
     recent: 1,
