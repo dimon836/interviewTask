@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
+# == Route Map
+#
+
 Rails.application.routes.draw do
-  namespace :api do
-    namespace :v1 do
-      resources :projects do
-        resources :tasks
-      end
-    end
+  resources :projects, controller: 'api/v1/projects' do
+    resources :tasks, controller: 'api/v1/tasks'
   end
 end

@@ -39,18 +39,33 @@ gem 'bootsnap', require: false
 # gem "rack-cors"
 
 group :development, :test do
+  gem 'database_cleaner', '~> 2.0', '>= 2.0.2'
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails', '~> 6.2'
+  gem 'faker'
+  gem 'fuubar'
+  gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 6.0', '>= 6.0.3'
   gem 'rubocop', '~> 1.56', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
+  gem 'shoulda-matchers'
 end
 
 group :development do
   gem 'annotate', '~> 3.1', '>= 3.1.1'
+  gem 'devise', '~> 4.9'
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+end
+
+group :test do
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem 'capybara'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
 end

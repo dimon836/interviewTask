@@ -29,5 +29,6 @@ class Task < ApplicationRecord
   }
 
   validates :name, presence: true, length: { minimum: 3, maximum: 30 }
+  validates :description, presence: true
   validates :status, presence: true, inclusion: { in: statuses.keys }
 end

@@ -3,10 +3,12 @@
 module Api
   module V1
     class TasksController < ApplicationController
+      include TasksExceptionHandler
+
       before_action :task, only: %i[show update destroy]
 
       def index
-        @tasks = Task.by_status(Task.statuses[:recent])
+        @tasks = Task.all
 
         respond_to do |format|
           format_response(format, @tasks, :ok)
@@ -15,7 +17,7 @@ module Api
 
       def show
         respond_to do |format|
-          if @task
+          if task
             format_response(format, @task, :ok)
           else
             format_response(format, { error: 'Task not found' }, :unprocessable_entity)
@@ -36,13 +38,13 @@ module Api
       end
 
       def update
-        @task = Tasks::Update.call(@task, task_params)
+        @is_updated_task = Tasks::Update.call(@task, task_params)
 
         respond_to do |format|
-          if @task.errors.any?
+          if @is_updated_task.errors.any?
             format_response(format, { error: 'Error updating task' }, :unprocessable_entity)
           else
-            format_response(format, @task, :ok)
+            format_response(format, @is_updated_task, :ok)
           end
         end
       end

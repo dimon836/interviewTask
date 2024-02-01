@@ -3,22 +3,22 @@
 module Api
   module V1
     class ProjectsController < ApplicationController
-      before_action :project, only: %i[update destroy]
+      include ProjectsExceptionHandler
+
+      before_action :project, only: %i[show   update destroy]
 
       def index
-        @projects_with_tasks = Project.with_tasks_by_project
+        @projects = Project.all
 
         respond_to do |format|
-          format_response(format, @projects_with_tasks, :ok)
+          format_response(format, @projects, :ok)
         end
       end
 
       def show
-        @project_with_tasks = Project.with_tasks_by_project_id(params[:id])
-
         respond_to do |format|
-          if @project_with_tasks
-            format_response(format, @project_with_tasks, :ok)
+          if project
+            format_response(format, @project, :ok)
           else
             format_response(format, { error: 'Project not found' }, :unprocessable_entity)
           end
@@ -38,19 +38,19 @@ module Api
       end
 
       def update
-        @project = Projects::Update.call(@project, project_params)
+        @is_updated_project = Projects::Update.call(project, project_params)
 
         respond_to do |format|
-          if @project.errors.any?
+          if @is_updated_project.errors.any?
             format_response(format, { error: 'Error updating project' }, :unprocessable_entity)
           else
-            format_response(format, @project, :ok)
+            format_response(format, @is_updated_project, :ok)
           end
         end
       end
 
       def destroy
-        @destroyed_project = Projects::Destroy.call(@project)
+        @destroyed_project = Projects::Destroy.call(project)
 
         respond_to do |format|
           if @destroyed_project.errors.present?

@@ -20,4 +20,5 @@ class Project < ApplicationRecord
   scope :with_tasks_by_project, -> { includes(:tasks).as_json(include: :tasks) }
 
   validates :name, presence: true, length: { minimum: 3, maximum: 30 }
+  validates :description, presence: true
 end
