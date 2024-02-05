@@ -5,7 +5,7 @@ module Api
     class ProjectsController < ApplicationController
       include ProjectsExceptionHandler
 
-      before_action :project, only: %i[show   update destroy]
+      before_action :project, only: %i[show update destroy]
 
       def index
         @projects = Project.all
